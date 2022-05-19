@@ -68,6 +68,7 @@ public class NetworkManager : MonoBehaviour
 
     public void Connect(string ip)
     {
+        print("_"+ port + "_");
         Client.Connect($"{ip}:{port}");
     }
 
