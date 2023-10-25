@@ -26,6 +26,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject connectUI;
     [SerializeField] private InputField usernameField;
     [SerializeField] private InputField ipAddress;
+    [SerializeField] private Text text;
 
     private void Awake()
     {
@@ -51,5 +52,13 @@ public class UIManager : MonoBehaviour
         Message message = Message.Create(MessageSendMode.reliable, ClientToServerId.name);
         message.AddString(usernameField.text);
         NetworkManager.Singleton.Client.Send(message);
+    }
+
+    public Text GetText() =>text;
+
+    public void ExitGame()
+    {
+        Application.Quit();
+        print("Quitting");
     }
 }

@@ -22,10 +22,16 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    private Camera ccamera;
+
     private void Awake()
     {
         Singleton = this;
+
+        ccamera = GetComponent<Camera>();
     } 
+
+    public Camera GetCamera() => ccamera;
 
     public void SetCameraPos(Vector3 pos)
     {

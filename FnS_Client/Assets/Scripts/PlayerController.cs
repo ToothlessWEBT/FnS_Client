@@ -4,47 +4,42 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private bool[] inputs;
+    private bool[] moveInputs;
 
-    private void Start()
-    {
-        inputs = new bool[4];
-    }
+    private bool dashing;
+
+    
 
     private void Update()
     {
-        if(Input.GetKey(KeyCode.W))
-            inputs[0] = true;
-
-        if(Input.GetKey(KeyCode.S))
-            inputs[1] = true;
         
-        if(Input.GetKey(KeyCode.A))
-            inputs[2] = true;
-
-        if(Input.GetKey(KeyCode.D))
-            inputs[3] = true;
     }
 
     private void FixedUpdate()
     {
-        SendInput();
+        moveInputs = InputManager.Singleton.GetMoveInput();
 
-        for(int i = 0; i < inputs.Length; i++)
-        {
-            inputs[i] = false;
-        }
+        dashing = InputManager.Singleton.Dashing();
+
+        SendInput();
     }
 
     #region Messages
     
     private void SendInput()
     {
-        Message message = Message.Create(MessageSendMode.unreliable, ClientToServerId.input);
+        Message message = Message.Create(MessageSendMode.unreliable, ClientToServerId.moveInput);
 
-        message.AddBools(inputs, false);
+        message.AddBools(moveInputs, false);
         message.AddVector3(transform.forward);
         NetworkManager.Singleton.Client.Send(message);
+
+        if(dashing)
+        {   
+            message = Message.Create(MessageSendMode.unreliable, ClientToServerId.dashing);
+            NetworkManager.Singleton.Client.Send(message);
+        }
+
     }
     #endregion
 }
